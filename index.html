@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de Pack de Baterias</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>Calculadora de Pack de Baterias</h1>
+      <p>Seleção e balanceamento de células por capacidade</p>
+    </div>
+    <button class="icon-button" id="themeToggle" type="button" title="Alternar tema" aria-label="Alternar tema">◐</button>
+  </header>
+
+  <main class="layout">
+    <section class="panel input-panel" aria-labelledby="inputTitle">
+      <h2 id="inputTitle">Entrada</h2>
+
+      <label class="field">
+        <span>Células medidas em mAh</span>
+        <textarea id="cellInput" spellcheck="false" placeholder="1218&#10;1195&#10;1203&#10;1178"></textarea>
+      </label>
+
+      <label class="check-row">
+        <input id="sortBeforeOptimizeInput" type="checkbox" checked>
+        <span>Ordenar entrada da maior para a menor antes de otimizar</span>
+      </label>
+
+      <div class="config-grid">
+        <label class="field">
+          <span>Série (S)</span>
+          <input id="seriesInput" type="number" min="1" step="1" value="5">
+        </label>
+        <label class="field">
+          <span>Paralelo (P)</span>
+          <input id="parallelInput" type="number" min="1" step="1" value="2">
+        </label>
+      </div>
+
+      <div class="preset-row" aria-label="Presets de série">
+        <button type="button" data-series="1">1S</button>
+        <button type="button" data-series="2">2S</button>
+        <button type="button" data-series="3">3S</button>
+        <button type="button" data-series="4">4S</button>
+        <button type="button" data-series="5">5S</button>
+        <button type="button" data-series="6">6S</button>
+        <button type="button" data-series="7">7S</button>
+      </div>
+
+      <fieldset class="mode-box">
+        <legend>Modo de seleção</legend>
+        <label><input type="radio" name="selectionMode" value="best" checked> Melhor pack</label>
+        <label><input type="radio" name="selectionMode" value="highest"> Usar células de maior capacidade</label>
+      </fieldset>
+
+      <dl class="counts">
+        <div><dt>Células necessárias</dt><dd id="neededCount">10</dd></div>
+        <div><dt>Células disponíveis</dt><dd id="availableCount">0</dd></div>
+        <div><dt>Células utilizadas</dt><dd id="usedCount">0</dd></div>
+        <div><dt>Células descartadas</dt><dd id="unusedCount">0</dd></div>
+      </dl>
+
+      <div class="actions">
+        <button id="optimizeBtn" class="primary" type="button">Otimizar pack</button>
+        <button id="loadExampleBtn" type="button">Carregar exemplo</button>
+        <button id="clearBtn" type="button">Limpar</button>
+      </div>
+
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="results-column" aria-live="polite">
+      <section id="emptyState" class="panel empty-state">
+        <h2>Resultado</h2>
+        <p>Informe as capacidades, configure S/P e otimize o pack.</p>
+      </section>
+
+      <section id="resultPanel" class="panel hidden">
+        <div class="result-heading">
+          <div>
+            <h2 id="packTitle">Pack</h2>
+            <p id="qualityText" class="quality">-</p>
+          </div>
+          <span id="qualityBadge" class="quality-badge">-</span>
+        </div>
+
+        <div id="summaryGrid" class="summary-grid"></div>
+
+        <section class="use-list">
+          <h3>Células que você deve usar</h3>
+          <p id="seriesExplanation" class="hint"></p>
+          <div id="usedCellsList" class="cell-list compact"></div>
+        </section>
+
+        <h3>Grupos</h3>
+        <div id="groupsContainer" class="groups"></div>
+
+        <h3>Visualização</h3>
+        <div id="barsContainer" class="bars"></div>
+
+        <details class="technical">
+          <summary>Detalhes técnicos da otimização</summary>
+          <div id="technicalDetails"></div>
+        </details>
+      </section>
+
+      <section id="unusedPanel" class="panel hidden">
+        <h2>Células não utilizadas</h2>
+        <div id="unusedCells" class="cell-list"></div>
+      </section>
+
+      <section id="tablePanel" class="panel hidden">
+        <h2>Tabela das células</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button type="button" data-sort="id">ID</button></th>
+                <th><button type="button" data-sort="capacity">Capacidade</button></th>
+                <th><button type="button" data-sort="status">Status</button></th>
+                <th><button type="button" data-sort="group">Grupo</button></th>
+              </tr>
+            </thead>
+            <tbody id="cellTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    Esta ferramenta realiza apenas cálculos de capacidade e agrupamento. A montagem física de packs de íons de lítio exige células compatíveis, BMS adequado, proteção elétrica e procedimentos seguros.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
